@@ -12,7 +12,7 @@ public class CarBase : MonoBehaviour
     /// <summary>
     /// 최대 가속도
     /// </summary>
-    public float maxSpeed = 10f;
+    public float maxSpeed = 30f;
     /// <summary>
     /// 가속도
     /// </summary>
