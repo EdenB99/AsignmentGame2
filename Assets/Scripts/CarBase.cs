@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,9 +48,6 @@ public class CarBase : MonoBehaviour
     private Rigidbody carRigidBody;
     private WheelCollider[] wheelColliders;
     PlayerInput inputActions;
-
-
-
     private void Awake()
     {
         carRigidBody = GetComponent<Rigidbody>();
@@ -62,9 +60,14 @@ public class CarBase : MonoBehaviour
         inputActions.Player.Move.performed += OnMoveInput;
         inputActions.Player.Acceleration.performed += Acceleration;
         inputActions.Player.Dlft.performed += Dlft;
+        inputActions.Player.Dlft.canceled += Dlft;
     }
+
+  
+
     private void OnDisable()
     {
+        inputActions.Player.Dlft.canceled -= Dlft;
         inputActions.Player.Dlft.performed -= Dlft;
         inputActions.Player.Acceleration.performed -= Acceleration;
         inputActions.Player.Move.performed -= OnMoveInput;
@@ -80,10 +83,43 @@ public class CarBase : MonoBehaviour
         Move();
         Rotate();
     }
+    
 
     private void Dlft(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        if (context.performed)
+        {
+            if (rotateDirection > 0f)
+            {
+                // 우회전 중인 경우
+                RotateCar(45f, 20f);
+            }
+            else if (rotateDirection < 0f)
+            {
+                // 좌회전 중인 경우
+                RotateCar(-45f, 20f);
+            }
+        }
+        else if (context.canceled)
+        {
+            // 원래 형태로 복귀
+            RotateCar(0f, 5f);
+        }
+    }
+    private void RotateCar(float targetAngle, float targetSpeed)
+    {
+
+        while (currentRotationSpeed < targetSpeed)
+        {
+            // 회전 속도 점진적으로 변경
+            rotationSpeed = Mathf.MoveTowards(currentRotationSpeed, targetSpeed, rotationAcceleration * Time.deltaTime);
+            currentRotationSpeed = rotationSpeed;
+
+            // 자동차 회전
+            float rotation = targetAngle * rotationSpeed * Time.deltaTime;
+            Quaternion deltaRotation = Quaternion.Euler(Vector3.up * rotation);
+            carRigidBody.MoveRotation(carRigidBody.rotation * deltaRotation);
+        }
     }
 
     private void Acceleration(InputAction.CallbackContext context)
