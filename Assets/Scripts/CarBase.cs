@@ -13,7 +13,7 @@ public class CarBase : MonoBehaviour
     /// <summary>
     /// 최대 가속도
     /// </summary>
-    public float maxSpeed = 30f;
+    public float maxSpeed = 300f;
     /// <summary>
     /// 가속도
     /// </summary>
@@ -56,14 +56,20 @@ public class CarBase : MonoBehaviour
     }
     private void OnEnable()
     {
+       
+    }
+    public void startMove()
+    {
+        carRigidBody.AddForce(new Vector3());
+    }
+    public void StartinputData()
+    {
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += OnMoveInput;
         inputActions.Player.Acceleration.performed += Acceleration;
         inputActions.Player.Dlft.performed += Dlft;
         inputActions.Player.Dlft.canceled += Dlft;
     }
-
-  
 
     private void OnDisable()
     {
@@ -82,8 +88,31 @@ public class CarBase : MonoBehaviour
     {
         Move();
         Rotate();
+        Gear();
+        posY();
     }
-    
+
+    private void posY()
+    {
+       if (transform.position.y > 12f) 
+        {
+            transform.position -= new Vector3(0, 3, 0);
+            currentSpeed = 10f;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        } else if (transform.position.y < -12f)
+        {
+            transform.position -= new Vector3(0, 3, 0);
+            currentSpeed = 10f;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        if (transform.rotation.z > 100f)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        } else if (transform.rotation.z < -100f)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
 
     private void Dlft(InputAction.CallbackContext context)
     {
@@ -151,7 +180,13 @@ public class CarBase : MonoBehaviour
         else if (moveDirection < 0f)
         {
             // 후진 상태일 때
-            currentSpeed += moveDirection * acceleration * Time.deltaTime;
+            if (currentSpeed >= 0f)
+            {
+                currentSpeed += moveDirection * acceleration*2 * Time.deltaTime;
+            }else
+            {
+                currentSpeed += moveDirection * acceleration/2 * Time.deltaTime;
+            }
             if (currentSpeed < -maxSpeed)
             {
                 currentSpeed = -maxSpeed;
@@ -168,6 +203,33 @@ public class CarBase : MonoBehaviour
         Vector3 forwardMovement = transform.forward * currentSpeed * Time.deltaTime;
         carRigidBody.MovePosition(carRigidBody.position + forwardMovement);
     }
+    void Gear()
+    {
+        
+      if (currentSpeed >= 150f)
+        {
+            acceleration = 7f;
+            rotationAcceleration = 1f;
+        } else if (currentSpeed >= 100f)
+        {
+            acceleration = 5f;
+            rotationAcceleration = 2f;
+        } else if (currentSpeed >= 70f)
+        {
+            acceleration = 3f;
+            rotationAcceleration = 3f;
+        } else if (currentSpeed >= 50f)
+        {
+            acceleration = 2f;
+            rotationAcceleration = 4f;
+        } else
+        {
+            acceleration = 1f;
+            rotationAcceleration = 5f;
+        }
+    }
+
+
     void Rotate()
     {
         float minRotationSpeed = 40f; // 최소 회전 속도
