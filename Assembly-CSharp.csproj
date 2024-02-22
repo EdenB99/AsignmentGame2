@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\CarBase.cs" />
     <Compile Include="Assets\Scripts\SpeedText.cs" />
     <Compile Include="Assets\Input\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\Goalin.cs" />
     <Compile Include="Assets\Scripts\CameraChange.cs" />
     <Compile Include="Assets\Input\CameraInput.cs" />
   </ItemGroup>

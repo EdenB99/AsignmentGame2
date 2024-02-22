@@ -195,10 +195,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 25f3b3ee50ef2cd4dba7f5a60d55a782, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 5641989115083913587}
+        m_TargetAssemblyTypeName: PlayButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -431,6 +431,7 @@ GameObject:
   - component: {fileID: 2027364157547356697}
   - component: {fileID: 188572529948147986}
   - component: {fileID: 898705987222493993}
+  - component: {fileID: 5641989115083913587}
   m_Layer: 5
   m_Name: StartUI
   m_TagString: Untagged
@@ -466,7 +467,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7873778005857170179}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -522,6 +523,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5641989115083913587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7873778005857170179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25f3b3ee50ef2cd4dba7f5a60d55a782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 6524371324425486640}
 --- !u!1 &8411231880700372579
 GameObject:
   m_ObjectHideFlags: 0

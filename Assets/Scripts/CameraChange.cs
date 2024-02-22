@@ -21,6 +21,9 @@ public class CameraChange : MonoBehaviour
         {
             vcams = FindObjectsByType<CinemachineVirtualCamera>(FindObjectsSortMode.None);
         }
+        vcams[0].Priority = 10;
+        vcams[1].Priority = 10;
+        vcams[2].Priority = 100;
     }
 
     private void OnEnable()

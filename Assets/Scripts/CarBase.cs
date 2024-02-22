@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
+using static UnityEngine.InputSystem.InputAction;
 
 public class CarBase : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class CarBase : MonoBehaviour
     /// <summary>
     /// 회전 속도
     /// </summary>
-    public float rotationSpeed = 40f;
+    public float rotationSpeed = 20f;
     /// <summary>
     /// 회전 가속도
     /// </summary>
@@ -108,32 +109,33 @@ public class CarBase : MonoBehaviour
         if (transform.rotation.z > 100f)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            currentSpeed = 10f;
         } else if (transform.rotation.z < -100f)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            currentSpeed = 10f;
         }
     }
+    private float beforerotationAccel = 0f;
+    bool isDlft = false;
 
     private void Dlft(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        
+        if (context.performed) 
         {
-            if (rotateDirection > 0f)
-            {
-                // 우회전 중인 경우
-                RotateCar(45f, 20f);
-            }
-            else if (rotateDirection < 0f)
-            {
-                // 좌회전 중인 경우
-                RotateCar(-45f, 20f);
-            }
-        }
-        else if (context.canceled)
+            isDlft = true;
+            Debug.Log("asdf");
+            currentSpeed -= moveDirection * acceleration*10 * Time.deltaTime;
+            beforerotationAccel = rotationAcceleration;
+            rotationAcceleration = 10f;
+        } else if (context.canceled)
         {
-            // 원래 형태로 복귀
-            RotateCar(0f, 5f);
+            isDlft = false;
+            Debug.Log("asas");
+            rotationAcceleration = beforerotationAccel;
         }
+
     }
     private void RotateCar(float targetAngle, float targetSpeed)
     {
@@ -170,12 +172,13 @@ public class CarBase : MonoBehaviour
     private void Move()
     {
         if (moveDirection > 0f)
-        {
-            // 전진 상태일 때
-            currentSpeed += moveDirection * acceleration * Time.deltaTime;
-            // 최대 속도 제한
-            currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
-
+        {   if (!isDlft)
+            {
+                // 전진 상태일 때
+                currentSpeed += moveDirection * acceleration * Time.deltaTime;
+                // 최대 속도 제한
+                currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
+            }
         }
         else if (moveDirection < 0f)
         {
@@ -206,33 +209,40 @@ public class CarBase : MonoBehaviour
     void Gear()
     {
         
-      if (currentSpeed >= 150f)
+      if (currentSpeed >= 100f)
         {
             acceleration = 7f;
-            rotationAcceleration = 1f;
-        } else if (currentSpeed >= 100f)
-        {
-            acceleration = 5f;
-            rotationAcceleration = 2f;
+            rotationChange(1f);
         } else if (currentSpeed >= 70f)
         {
-            acceleration = 3f;
-            rotationAcceleration = 3f;
+            acceleration = 5f;
+            rotationChange(1.5f);
         } else if (currentSpeed >= 50f)
         {
+            acceleration = 3f;
+            rotationChange(2f);
+        } else if (currentSpeed >= 30f)
+        {
             acceleration = 2f;
-            rotationAcceleration = 4f;
+            rotationChange(2.5f);
         } else
         {
             acceleration = 1f;
-            rotationAcceleration = 5f;
+            rotationChange(3f);
+        }
+    }
+    void rotationChange(float rotaionAccel)
+    {
+        if (!isDlft)
+        {
+            rotationAcceleration = rotaionAccel;
         }
     }
 
 
     void Rotate()
     {
-        float minRotationSpeed = 40f; // 최소 회전 속도
+        float minRotationSpeed = 20f; // 최소 회전 속도
         float maxRotationSpeed = 80f; // 최대 회전 속도
         float rotateDirection = inputActions.Player.Move.ReadValue<Vector2>().x;
 

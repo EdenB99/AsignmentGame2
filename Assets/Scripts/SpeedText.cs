@@ -10,7 +10,7 @@ public class SpeedText : MonoBehaviour
 
     void Update()
     {
-        float kmhSpeed = carBase.currentSpeed;
+        float kmhSpeed = carBase.currentSpeed*1.2f;
         text.text = kmhSpeed.ToString("N0") + " Km/h";
     }
 }

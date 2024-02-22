@@ -79,6 +79,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""d00f7d29-2a67-42e3-9e55-2c7840ac99fe"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dlft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""Arrow"",
                     ""id"": ""358a8a72-fe0e-41d3-be9f-a1d2a1cd0ddf"",
                     ""path"": ""2DVector(mode=1)"",
