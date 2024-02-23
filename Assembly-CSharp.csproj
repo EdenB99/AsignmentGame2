@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\PlayButton.cs" />
+    <Compile Include="Assets\Scripts\EndUI.cs" />
     <Compile Include="Assets\Scripts\CarBase.cs" />
     <Compile Include="Assets\Scripts\SpeedText.cs" />
     <Compile Include="Assets\Input\PlayerInput.cs" />

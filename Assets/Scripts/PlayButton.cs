@@ -9,11 +9,13 @@ public class PlayButton : MonoBehaviour
     public Image image;
     CameraChange CameraChange;
     CarBase CarBase;
-    
+    public Canvas ingameText;
+
     void Start()
     {
         CameraChange = FindAnyObjectByType<CameraChange>();
         CarBase = FindAnyObjectByType<CarBase>();
+        
     }
     public void OnClick()
     {
@@ -23,5 +25,6 @@ public class PlayButton : MonoBehaviour
         CameraChange.vcams[1].Priority = 10;
         CameraChange.vcams[2].Priority = 10;
         CarBase.StartinputData();
+        ingameText.gameObject.SetActive(true);
     }
 }

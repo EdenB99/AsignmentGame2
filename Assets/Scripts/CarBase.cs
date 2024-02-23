@@ -74,6 +74,10 @@ public class CarBase : MonoBehaviour
 
     private void OnDisable()
     {
+          EndinputData();   
+    }
+    public void EndinputData()
+    {
         inputActions.Player.Dlft.canceled -= Dlft;
         inputActions.Player.Dlft.performed -= Dlft;
         inputActions.Player.Acceleration.performed -= Acceleration;
