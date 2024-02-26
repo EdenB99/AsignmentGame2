@@ -49,6 +49,7 @@ public class CarBase : MonoBehaviour
     private Rigidbody carRigidBody;
     private WheelCollider[] wheelColliders;
     PlayerInput inputActions;
+    public Transform startpoint;
     private void Awake()
     {
         carRigidBody = GetComponent<Rigidbody>();
@@ -94,31 +95,36 @@ public class CarBase : MonoBehaviour
         Move();
         Rotate();
         Gear();
-        posY();
+        RePos();
     }
 
-    private void posY()
+    private void RePos()
     {
-       if (transform.position.y > 12f) 
-        {
-            transform.position -= new Vector3(0, 3, 0);
-            currentSpeed = 10f;
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        } else if (transform.position.y < -12f)
+        if (transform.position.y > 12f)
         {
             transform.position -= new Vector3(0, 3, 0);
             currentSpeed = 10f;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        if (transform.rotation.z > 100f)
+        else if (transform.position.y < -12f)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.position -= new Vector3(0, 3, 0);
             currentSpeed = 10f;
-        } else if (transform.rotation.z < -100f)
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        } else if (transform.position.y < -300f)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.position = startpoint.position;
             currentSpeed = 10f;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+            
+        if (transform.rotation.z >= 180f)
+        {
+            transform.position += new Vector3(0, 3, 0);
+            currentSpeed = 10f;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        
     }
     private float beforerotationAccel = 0f;
     bool isDlft = false;
@@ -130,9 +136,7 @@ public class CarBase : MonoBehaviour
         {
             isDlft = true;
             Debug.Log("asdf");
-            currentSpeed -= moveDirection * acceleration*10 * Time.deltaTime;
-            beforerotationAccel = rotationAcceleration;
-            rotationAcceleration = 10f;
+            
         } else if (context.canceled)
         {
             isDlft = false;
@@ -182,6 +186,11 @@ public class CarBase : MonoBehaviour
                 currentSpeed += moveDirection * acceleration * Time.deltaTime;
                 // 최대 속도 제한
                 currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
+            } else
+            {
+                currentSpeed -= acceleration * 10 * Time.deltaTime;
+                beforerotationAccel = rotationAcceleration;
+                rotationAcceleration = 10f;
             }
         }
         else if (moveDirection < 0f)

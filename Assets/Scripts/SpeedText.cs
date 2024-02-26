@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,24 +6,65 @@ using UnityEngine;
 
 public class SpeedText : MonoBehaviour
 {
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI Speedtext;
+    public TextMeshProUGUI TimeText;
     public CarBase carBase;
-
-    public float timeText;
+    EndUI endUI;
+    public float timesec = 0;
+    float timemin = 0 ;
     public bool isStart;
     public float speedAdd;
     public float avergeSpeed;
+    float kmhSpeed;
+    private void Start()
+    {
+        endUI = FindAnyObjectByType<EndUI>();
+    }
     void Update()
     {
-        float kmhSpeed = carBase.currentSpeed * 1.2f;
-        text.text = kmhSpeed.ToString("N0") + " Km/h";
-        if (isStart )
+        kmhSpeed = carBase.currentSpeed * 1.2f;
+        if (isStart)
         {
-            timeText += Time.deltaTime;
-            speedAdd += kmhSpeed/100;
-            avergeSpeed = Mathf.FloorToInt(speedAdd/timeText);
+            timesec += Time.deltaTime;
+            if (timesec >= 60f)
+            {
+                timemin++;
+                timesec = 0;
+                speedAdd = kmhSpeed;
+            }
+            
+            avergeSpeed = Mathf.FloorToInt(speedAdd/timemin);
+            SetText();
         }
+        endUI.averageSpeed = avergeSpeed;
+        endUI.currenttime = timeText;
     }
+    string timeText;
+    private void SetText()
+    {
+        Speedtext.text = kmhSpeed.ToString("N0") + " Km/h";
+        if (timemin >= 10f)
+        {
+            if (timesec >= 10f)
+            {
+                TimeText.text = timemin.ToString("N0") + " : " + timesec.ToString("N0");
+            } else
+            {
+                TimeText.text = timemin.ToString("N0") + " : 0" + timesec.ToString("N0");
+            }
+        } else
+        {
+            if (timesec >= 10f)
+            {
+                TimeText.text = "0"+timemin.ToString("N0") + " : " + timesec.ToString("N0");
+            } else
+            {
+                TimeText.text = "0" + timemin.ToString("N0") + " : 0" + timesec.ToString("N0");
+            }
+        }
+        timeText = TimeText.text;
+    }   
+
     private void OnEnable()
     {
         isStart = true;

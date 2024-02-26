@@ -20,6 +20,7 @@ public class GoalIn : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        
         EndUI.gameObject.SetActive(true);
         car.EndinputData();
     }

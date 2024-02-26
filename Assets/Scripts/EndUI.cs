@@ -9,9 +9,9 @@ public class EndUI : MonoBehaviour
 {
     TextMeshProUGUI[] infoText;
     //[current time : ]
-    public float currenttime = 0;
+    public string currenttime;
     //[average Speed : ]
-    
+    public float averageSpeed = 0;
     //[Over-the-line : ]
     bool isEnd = false;
 
@@ -32,5 +32,10 @@ public class EndUI : MonoBehaviour
     private void OnEnable()
     {
         isEnd = true;
+        setText();
+    }
+    void setText()
+    {
+        infoText[1].text = $"[current time : {currenttime}]\r\n\r\n[average Speed : {averageSpeed}]\r\n\r\n[Over-the-line : ]";
     }
 }
