@@ -49,12 +49,17 @@ public class CarBase : MonoBehaviour
     private Rigidbody carRigidBody;
     private WheelCollider[] wheelColliders;
     PlayerInput inputActions;
-    public Transform startpoint;
+    public Transform stpoint;
+    public Vector3 startpoint;
     private void Awake()
     {
         carRigidBody = GetComponent<Rigidbody>();
         FindWheelColliders();
         inputActions = new();
+    }
+    private void Start()
+    {
+        startpoint = stpoint.position;
     }
     private void OnEnable()
     {
@@ -71,6 +76,12 @@ public class CarBase : MonoBehaviour
         inputActions.Player.Acceleration.performed += Acceleration;
         inputActions.Player.Dlft.performed += Dlft;
         inputActions.Player.Dlft.canceled += Dlft;
+        inputActions.Player.Reset.performed += Reset;
+    }
+
+    private void Reset(CallbackContext context)
+    {
+        gameObject.transform.position = startpoint;
     }
 
     private void OnDisable()
@@ -79,6 +90,7 @@ public class CarBase : MonoBehaviour
     }
     public void EndinputData()
     {
+        inputActions.Player.Reset.performed -= Reset;
         inputActions.Player.Dlft.canceled -= Dlft;
         inputActions.Player.Dlft.performed -= Dlft;
         inputActions.Player.Acceleration.performed -= Acceleration;
@@ -97,7 +109,7 @@ public class CarBase : MonoBehaviour
         Gear();
         RePos();
     }
-
+    public int outOfLine = 0;
     private void RePos()
     {
         if (transform.position.y > 12f)
@@ -105,17 +117,21 @@ public class CarBase : MonoBehaviour
             transform.position -= new Vector3(0, 3, 0);
             currentSpeed = 10f;
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            outOfLine++;
         }
         else if (transform.position.y < -12f)
         {
             transform.position -= new Vector3(0, 3, 0);
             currentSpeed = 10f;
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            outOfLine++;
+
         } else if (transform.position.y < -300f)
         {
-            transform.position = startpoint.position;
+            gameObject.transform.Translate(startpoint, Space.World);
             currentSpeed = 10f;
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            outOfLine++;
         }
             
         if (transform.rotation.z >= 180f)
@@ -123,6 +139,7 @@ public class CarBase : MonoBehaviour
             transform.position += new Vector3(0, 3, 0);
             currentSpeed = 10f;
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            outOfLine++;
         }
         
     }

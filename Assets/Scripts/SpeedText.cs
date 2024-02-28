@@ -9,7 +9,7 @@ public class SpeedText : MonoBehaviour
     public TextMeshProUGUI Speedtext;
     public TextMeshProUGUI TimeText;
     public CarBase carBase;
-    EndUI endUI;
+    public EndUI endUI;
     public float timesec = 0;
     float timemin = 0 ;
     public bool isStart;
@@ -18,7 +18,7 @@ public class SpeedText : MonoBehaviour
     float kmhSpeed;
     private void Start()
     {
-        endUI = FindAnyObjectByType<EndUI>();
+       
     }
     void Update()
     {
@@ -38,6 +38,7 @@ public class SpeedText : MonoBehaviour
         }
         endUI.averageSpeed = avergeSpeed;
         endUI.currenttime = timeText;
+        endUI.outlinecount = carBase.outOfLine;
     }
     string timeText;
     private void SetText()
@@ -63,6 +64,7 @@ public class SpeedText : MonoBehaviour
             }
         }
         timeText = TimeText.text;
+        
     }   
 
     private void OnEnable()

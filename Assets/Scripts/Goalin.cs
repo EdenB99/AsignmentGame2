@@ -23,5 +23,6 @@ public class GoalIn : MonoBehaviour
         
         EndUI.gameObject.SetActive(true);
         car.EndinputData();
+        car.acceleration = 0f;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -14,7 +15,7 @@ public class EndUI : MonoBehaviour
     public float averageSpeed = 0;
     //[Over-the-line : ]
     bool isEnd = false;
-
+    public int outlinecount = 0;
     private void Awake()
     {
         infoText = GetComponentsInChildren<TextMeshProUGUI>();
@@ -36,6 +37,6 @@ public class EndUI : MonoBehaviour
     }
     void setText()
     {
-        infoText[1].text = $"[current time : {currenttime}]\r\n\r\n[average Speed : {averageSpeed}]\r\n\r\n[Over-the-line : ]";
+        infoText[1].text = $"[current time : {currenttime}]\r\n\r\n[average Speed : {Convert.ToInt32(averageSpeed)}km/h]\r\n\r\n[Over-the-line : {outlinecount}]";
     }
 }
