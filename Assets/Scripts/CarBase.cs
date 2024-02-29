@@ -27,7 +27,10 @@ public class CarBase : MonoBehaviour
     /// 이동 방향(1 : 전진, -1 : 후진, 0 : 정지)
     /// </summary>
     private float moveDirection = 0.0f;
-
+    /// <summary>
+    /// 장외, 재위치시 추가되는 횟수카운트
+    /// </summary>
+    public int outOfLine = 0;
 
     /// <summary>
     /// 회전 속도
@@ -49,6 +52,8 @@ public class CarBase : MonoBehaviour
     private Rigidbody carRigidBody;
     private WheelCollider[] wheelColliders;
     PlayerInput inputActions;
+
+    //시작 포인트 위치
     public Transform stpoint;
     public Vector3 startpoint;
     private void Awake()
@@ -74,6 +79,7 @@ public class CarBase : MonoBehaviour
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += OnMoveInput;
         inputActions.Player.Acceleration.performed += Acceleration;
+        inputActions.Player.Acceleration.canceled+= Acceleration;
         inputActions.Player.Dlft.performed += Dlft;
         inputActions.Player.Dlft.canceled += Dlft;
         inputActions.Player.Reset.performed += Reset;
@@ -82,6 +88,7 @@ public class CarBase : MonoBehaviour
     private void Reset(CallbackContext context)
     {
         gameObject.transform.position = startpoint;
+        outOfLine++;
     }
 
     private void OnDisable()
@@ -93,6 +100,7 @@ public class CarBase : MonoBehaviour
         inputActions.Player.Reset.performed -= Reset;
         inputActions.Player.Dlft.canceled -= Dlft;
         inputActions.Player.Dlft.performed -= Dlft;
+        inputActions.Player.Acceleration.canceled -= Acceleration;
         inputActions.Player.Acceleration.performed -= Acceleration;
         inputActions.Player.Move.performed -= OnMoveInput;
         inputActions.Player.Disable();
@@ -109,7 +117,7 @@ public class CarBase : MonoBehaviour
         Gear();
         RePos();
     }
-    public int outOfLine = 0;
+
     private void RePos()
     {
         if (transform.position.y > 12f)
@@ -152,12 +160,12 @@ public class CarBase : MonoBehaviour
         if (context.performed) 
         {
             isDlft = true;
-            Debug.Log("asdf");
+            Debug.Log("dlftOn");
             
         } else if (context.canceled)
         {
             isDlft = false;
-            Debug.Log("asas");
+            Debug.Log("dlftOff");
             rotationAcceleration = beforerotationAccel;
         }
 
@@ -180,7 +188,17 @@ public class CarBase : MonoBehaviour
 
     private void Acceleration(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        if (context.performed)
+        {
+            if (!isDlft)
+            {
+                currentSpeed += (moveDirection  * acceleration)+30*Time.deltaTime;
+            }
+        } else if (context.canceled)
+        {
+
+        }
+        
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
